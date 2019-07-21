@@ -11,6 +11,7 @@ import br.com.cvc.agendamento.model.TipoTransacao;
 import br.com.cvc.agendamento.repository.AgendamentoRepository;
 import br.com.cvc.agendamento.repository.TipoTransacaoRepository;
 import br.com.cvc.agendamento.service.AgendamentoService;
+import br.com.cvc.agendamento.utils.MensagensUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,9 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Autowired
     private TipoTransacaoRepository tipoTransacaoRepository;
+
+    @Autowired
+    private MensagensUtils mensagensUtils;
 
     @Override
     public ConsultaAgendamentosDTO listar(FiltroConsultaAgendamentoDTO dto) {
@@ -82,6 +86,8 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             return novoAgendamentoDTO;
         }
 
-        return null;
+        List<String> mensagens = new ArrayList<>();
+        mensagens.add(mensagensUtils.get("api.agendamento.novo.business.exception.taxa.nao.cadastrada", null));
+        throw new BusinessException(mensagens);
     }
 }
