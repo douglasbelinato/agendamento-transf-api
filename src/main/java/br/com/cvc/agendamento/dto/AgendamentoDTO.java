@@ -1,0 +1,99 @@
+package br.com.cvc.agendamento.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.io.Serializable;
+import java.time.LocalDate;
+
+@Getter @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class AgendamentoDTO implements Serializable {
+
+    private static final long serialVersionUID = -545550541020409288L;
+
+    @ApiModelProperty(notes = "Conta de origem", required = true, example = "12345")
+    private Integer contaOrigem;
+
+    @ApiModelProperty(notes = "Conta de destino", required = true, example = "45678")
+    private Integer contaDestino;
+
+    @ApiModelProperty(notes = "Valor da transferência", required = true, example = "100")
+    private Double valor;
+
+    @ApiModelProperty(notes = "Data de efetivação da transferência", required = true, example = "21-07-2019")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDate dataTransferencia;
+
+    @ApiModelProperty(notes = "Data de agendamento da transferência (solicitação)", required = true, example = "21-07-2019")
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDate dataAgendamento;
+
+    @ApiModelProperty(notes = "ID do usuaário que está realizando o agendamento", required = true, example = "1")
+    private Long idUsuario;
+
+    public static class AgendamentoDTOBuilder {
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfNoMesmoDia() {
+            popularDadosComuns();
+            valor = 100d;
+            dataTransferencia = LocalDate.now();
+            return this;
+        }
+
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfAte10Dias() {
+            popularDadosComuns();
+            valor = 100d;
+            dataTransferencia = LocalDate.now().plusDays(10);
+            return this;
+        }
+
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfEntre10E20Dias() {
+            popularDadosComuns();
+            valor = 100d;
+            dataTransferencia = LocalDate.now().plusDays(15);
+            return this;
+        }
+
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfEntre20E30Dias() {
+            popularDadosComuns();
+            valor = 100d;
+            dataTransferencia = LocalDate.now().plusDays(25);
+            return this;
+        }
+
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfEntre30E40Dias() {
+            popularDadosComuns();
+            valor = 100d;
+            dataTransferencia = LocalDate.now().plusDays(35);
+            return this;
+        }
+
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfAcima40DiasAcimaCemMil() {
+            popularDadosComuns();
+            valor = 200000d;
+            dataTransferencia = LocalDate.now().plusDays(45);
+            return this;
+        }
+
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfAcima40DiasAteCemMil() {
+            popularDadosComuns();
+            valor = 100000d;
+            dataTransferencia = LocalDate.now().plusDays(45);
+            return this;
+        }
+
+        private void popularDadosComuns() {
+            contaOrigem = 12345;
+            contaDestino = 45678;
+            dataAgendamento = LocalDate.now();
+            idUsuario = 1L;
+        }
+    }
+}
