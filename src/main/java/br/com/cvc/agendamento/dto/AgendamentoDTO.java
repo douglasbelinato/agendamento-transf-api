@@ -27,13 +27,13 @@ public class AgendamentoDTO implements Serializable {
     private Double valor;
 
     @ApiModelProperty(notes = "Data de efetivação da transferência", required = true, example = "21-07-2019")
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataTransferencia;
 
     @ApiModelProperty(notes = "Data de agendamento da transferência (solicitação)", required = true, example = "21-07-2019")
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
-    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataAgendamento;
 
     @ApiModelProperty(notes = "ID do usuaário que está realizando o agendamento", required = true, example = "1")
