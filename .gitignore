@@ -21,3 +21,24 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Compiled files and Eclipse IDE configuration files
+.metadata
+.recommenders
+/RemoteSystemsTempFiles
+/Servers
+*/target
+*/.settings
+*.classpath
+*.project
+*.tern-project
+**/rebel.xml
+/target/
+.settings/org.eclipse.m2e.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.core.resources.prefs
+.settings/
+
+# IntelliJ IDE configuration files
+.idea
+*.iml
