@@ -1,8 +1,5 @@
 package br.com.cvc.agendamento.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import br.com.cvc.agendamento.dto.ResponseErroDTO;
+import br.com.cvc.agendamento.enums.TipoErroEnum;
 import br.com.cvc.agendamento.exception.BusinessException;
 import br.com.cvc.agendamento.utils.MensagensUtils;
 import io.swagger.annotations.Api;
@@ -25,14 +23,14 @@ import io.swagger.annotations.Api;
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionHandlerController.class);
+    private static Logger Logger = LoggerFactory.getLogger(ExceptionHandlerController.class);
 
     @Autowired
     private MensagensUtils mensagensUtils;
 
     @ExceptionHandler({BusinessException.class})
     public ResponseEntity<ResponseErroDTO> handleBusinessException(BusinessException e) {
-        LOGGER.error("handleBusinessException()", e);
+    	Logger.error("handleBusinessException()", e);
 
         ResponseErroDTO response = e.getResponse();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -40,34 +38,31 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        LOGGER.error("handleMissingServletRequestParameter()", e);
+    	Logger.error("handleMissingServletRequestParameter()", e);
 
-        List<String> mensagens =  new ArrayList<>();
-        mensagens.add(mensagensUtils.get("api.erro.request.parametro.nao.encontrado", new String[] { e.getParameterName() }));
+        String mensagem = mensagensUtils.get("api.erro.request.parametro.nao.encontrado", new String[] { e.getParameterName() });
 
-        ResponseErroDTO response = new ResponseErroDTO(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), mensagens);
+        ResponseErroDTO response = new ResponseErroDTO(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), mensagem, TipoErroEnum.TECNICO.getDescricao());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ResponseErroDTO> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        LOGGER.error("handleMethodArgumentTypeMismatchException()", e);
+    	Logger.error("handleMethodArgumentTypeMismatchException()", e);
 
-        List<String> mensagens =  new ArrayList<>();
-        mensagens.add(mensagensUtils.get("api.erro.request.tipo.parametro.invalido", new String[] { e.getName() }));
+    	String mensagem = mensagensUtils.get("api.erro.request.tipo.parametro.invalido", new String[] { e.getName() });
 
-        ResponseErroDTO response = new ResponseErroDTO(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), mensagens);
+        ResponseErroDTO response = new ResponseErroDTO(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.getReasonPhrase(), mensagem, TipoErroEnum.NEGOCIO.getDescricao());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ResponseErroDTO> heandleException(Exception e) {
-        LOGGER.error("heandleException()", e);
+    	Logger.error("heandleException()", e);
 
-        List<String> mensagens =  new ArrayList<>();
-        mensagens.add(mensagensUtils.get("api.erro.request.internal.server.error", null));
+    	String mensagem = mensagensUtils.get("api.erro.request.internal.server.error", null);
 
-        ResponseErroDTO response = new ResponseErroDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), mensagens);
+        ResponseErroDTO response = new ResponseErroDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), mensagem, TipoErroEnum.TECNICO.getDescricao());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

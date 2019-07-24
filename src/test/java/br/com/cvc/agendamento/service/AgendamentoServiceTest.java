@@ -8,6 +8,7 @@ import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +104,7 @@ public class AgendamentoServiceTest {
         AgendamentoDTO dto = AgendamentoDTO.builder().novoAgendamentoComDataTransfAte10Dias().build();
         TipoTransacao tipoTransacao = TipoTransacao.builder().tipoBPrioridade1().build();
 
-        long qtdDiasAgendamento = dto.getDataAgendamento().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
+        long qtdDiasAgendamento = LocalDate.now().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
 
         when(tipoTransacaoRepository.findByQtdDiasAndValor(anyInt(), anyDouble())).thenReturn(tipoTransacao);
         when(agendamentoRepository.save(any(Agendamento.class))).thenReturn(new Agendamento());
@@ -191,7 +192,7 @@ public class AgendamentoServiceTest {
             // Ação
             agendamentoService.inserir(dto);
         } catch (BusinessException e) {
-            assertThat(e.getResponse().getMensagens().get(0), is("Nao existe taxa aplicavel para esse tipo de transacao."));
+            assertThat(e.getResponse().getMensagem(), is("Nao existe taxa aplicavel para esse tipo de transacao."));
         }
     }
     
@@ -207,7 +208,7 @@ public class AgendamentoServiceTest {
             // Ação
             agendamentoService.inserir(dto);
         } catch (BusinessException e) {
-            assertThat(e.getResponse().getMensagens().get(0), is("A data de transferencia deve ser maior ou igual a data de hoje."));
+            assertThat(e.getResponse().getMensagem(), is("A data de transferencia deve ser maior ou igual a data de hoje."));
         }
     }
 }

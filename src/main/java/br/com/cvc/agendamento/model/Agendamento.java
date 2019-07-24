@@ -49,13 +49,13 @@ public class Agendamento implements Serializable {
     @Column(name = "taxa")
     private Double taxa;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "data_transferencia")
     private LocalDate dataTransferencia;
 
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     @Column(name = "data_agendamento")
     private LocalDate dataAgendamento;
 

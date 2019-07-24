@@ -1,6 +1,6 @@
 -- Populando algumas transferências inicias para massa de dados
 insert into agendamentos_transferencia (conta_origem, conta_destino, valor, taxa, data_transferencia, data_agendamento)
-    values (12345, 45678, 100, 6, current_timestamp, parsedatetime('05-05-2019 18:47:52', 'dd-MM-yyyy hh:mm:ss'));
+    values (12345, 45678, 100, 6, current_timestamp, parsedatetime('05/05/2019 18:47:52', 'dd/MM/yyyy hh:mm:ss'));
 
 insert into agendamentos_transferencia (conta_origem, conta_destino, valor, taxa, data_transferencia, data_agendamento)
     values (12345, 78945, 250, 6, current_timestamp, current_timestamp);

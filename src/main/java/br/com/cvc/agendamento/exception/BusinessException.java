@@ -1,26 +1,29 @@
 package br.com.cvc.agendamento.exception;
 
-import br.com.cvc.agendamento.dto.ResponseErroDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.List;
+import br.com.cvc.agendamento.dto.ResponseErroDTO;
+import br.com.cvc.agendamento.enums.TipoErroEnum;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class BusinessException extends RuntimeException {
 
-    private ResponseErroDTO response;
+	private static final long serialVersionUID = -6403647326719815387L;
+	
+	private ResponseErroDTO response;
 
     public BusinessException() {
         super();
     }
 
-    public BusinessException(List<String> mensagens) {
+    public BusinessException(String mensagem) {
         super();
         response = new ResponseErroDTO();
         response.setHttpStatusCode(HttpStatus.BAD_REQUEST.value());
         response.setHttpStatusMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
-        response.setMensagens(mensagens);
+        response.setMensagem(mensagem);
+        response.setTipoErro(TipoErroEnum.NEGOCIO.getDescricao());
     }
 
     public ResponseErroDTO getResponse() {

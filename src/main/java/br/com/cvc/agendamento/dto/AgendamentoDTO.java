@@ -33,15 +33,10 @@ public class AgendamentoDTO implements Serializable {
     @ApiModelProperty(notes = "Valor da transferência", required = true, example = "100")
     private Double valor;
 
-    @ApiModelProperty(notes = "Data de efetivação da transferência", required = true, example = "21-07-2019")
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    @ApiModelProperty(notes = "Data de efetivação da transferência", required = true, example = "21/07/2019")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataTransferencia;
-
-    @ApiModelProperty(notes = "Data de agendamento da transferência (solicitação)", required = true, example = "21-07-2019")
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDate dataAgendamento;
 
     public static class AgendamentoDTOBuilder {
         public AgendamentoDTOBuilder novoAgendamentoComDataTransfNoMesmoDia() {
@@ -102,8 +97,7 @@ public class AgendamentoDTO implements Serializable {
 
         private void popularDadosComuns() {
             contaOrigem = 12345;
-            contaDestino = 45678;
-            dataAgendamento = LocalDate.now();
+            contaDestino = 45678;            
         }
     }
 }

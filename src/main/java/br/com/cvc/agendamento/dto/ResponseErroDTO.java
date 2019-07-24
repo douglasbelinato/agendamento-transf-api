@@ -1,12 +1,11 @@
 package br.com.cvc.agendamento.dto;
 
+import java.io.Serializable;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.io.Serializable;
-import java.util.List;
 
 @Getter @Setter
 @AllArgsConstructor
@@ -19,5 +18,7 @@ public class ResponseErroDTO implements Serializable {
 
     private String httpStatusMessage;
 
-    private List<String> mensagens;
+    private String mensagem;
+    
+    private String tipoErro;
 }

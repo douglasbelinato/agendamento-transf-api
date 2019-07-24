@@ -1,9 +1,12 @@
 package br.com.cvc.agendamento.service.impl;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,8 @@ import br.com.cvc.agendamento.utils.MensagensUtils;
 
 @Service
 public class AgendamentoServiceImpl implements AgendamentoService {
+	
+	private Logger Logger = LoggerFactory.getLogger(AgendamentoServiceImpl.class);
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -33,8 +38,12 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Override
     public ConsultaAgendamentosDTO listar() {
-        List<Agendamento> agendamentos = agendamentoRepository.findAll();
+        Logger.info("Iniciando consulta de agendamentos");
+    	
+    	List<Agendamento> agendamentos = agendamentoRepository.findAll();
 
+    	Logger.info("Consulta de agendamentos realizada com sucess");
+    	
         if (agendamentos == null) {
             agendamentos = new ArrayList<>();
         }
@@ -47,17 +56,23 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Override
     public NovoAgendamentoDTO inserir(AgendamentoDTO dto) throws BusinessException {
-    	validarDadosDeEntrada(dto);    	
+    	validarDadosDeEntrada(dto);
     	
-    	long qtdDiasAgendamento = dto.getDataAgendamento().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
+    	Logger.info("Inciando processo de inclusão de novo agendamento de transferencia");
+    	
+    	LocalDate dataHoje = LocalDate.now();
+    	long qtdDiasAgendamento = dataHoje.until(dto.getDataTransferencia(), ChronoUnit.DAYS);
 
         TipoTransacao tipoTransacao = tipoTransacaoRepository.findByQtdDiasAndValor((int) qtdDiasAgendamento, dto.getValor());
 
         if (tipoTransacao != null) {
-            NovoAgendamentoDTO novoAgendamentoDTO = new NovoAgendamentoDTO();
+        	Logger.info("Transação possui taxa cadastrada - Tipo da Taxa: {} - Prioridade {}",tipoTransacao.getId().getCodTipoTransacao(), tipoTransacao.getId().getFaixaPrioridade());
+            
+        	NovoAgendamentoDTO novoAgendamentoDTO = new NovoAgendamentoDTO();
             Double taxa = 0d;
 
             if (tipoTransacao.getTaxaFixa().intValue() > 0) {
+            	
                 if (tipoTransacao.getFlagFatorQtdDias().equalsIgnoreCase(FlagEnum.SIM.getCodigo())) {
                     taxa += tipoTransacao.getTaxaFixa() * qtdDiasAgendamento;
                 } else {
@@ -75,28 +90,31 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             agendamento.setValor(dto.getValor());
             agendamento.setTaxa(taxa);
             agendamento.setDataTransferencia(dto.getDataTransferencia());
-            agendamento.setDataAgendamento(dto.getDataAgendamento());
+            agendamento.setDataAgendamento(dataHoje);
 
             Agendamento agendamentoSalvo = agendamentoRepository.save(agendamento);
+            
+            Logger.info("Agendamento de transferencia incluído com sucesso");
 
             novoAgendamentoDTO.setId(agendamentoSalvo.getId());
             novoAgendamentoDTO.setTaxa(taxa);
             return novoAgendamentoDTO;
         }
         
-        List<String> mensagens = new ArrayList<>();
-        mensagens.add(mensagensUtils.get("api.agendamento.novo.business.exception.taxa.nao.cadastrada", null));
-        throw new BusinessException(mensagens);
+        String mensagem = mensagensUtils.get("api.agendamento.novo.business.exception.taxa.nao.cadastrada", null);
+       throw new BusinessException(mensagem);
     }
     
     private void validarDadosDeEntrada(AgendamentoDTO dto) {
-    	List<String> mensagens = new ArrayList<>();
+    	Logger.info("Iniciando validação dos dados de entrada do novo agendamento");
     	
-    	long qtdDiasAgendamento = dto.getDataAgendamento().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
+    	String mensagem = null;
+    	
+    	long qtdDiasAgendamento = LocalDate.now().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
         
         if (qtdDiasAgendamento < 0) {
-        	mensagens.add(mensagensUtils.get("api.agendamento.novo.business.exception.data.transferencia.incorreta", null));
-            throw new BusinessException(mensagens);
+        	mensagem = mensagensUtils.get("api.agendamento.novo.business.exception.data.transferencia.incorreta", null);
+            throw new BusinessException(mensagem);
         }
     }
 }
