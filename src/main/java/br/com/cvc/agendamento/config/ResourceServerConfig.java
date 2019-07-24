@@ -8,6 +8,14 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 
+/**
+ * Resource Server do oAuth2 para manipular as requests
+ * autenticadas com um token válido.
+ * 
+ * Também utilizado para liberar URLs que não precisam passar
+ * pela autenticação do oAuth2 (exemplo: URLs do H2 e Swagger-UI). 
+ *
+ */
 @Configuration
 @EnableWebSecurity
 @EnableResourceServer

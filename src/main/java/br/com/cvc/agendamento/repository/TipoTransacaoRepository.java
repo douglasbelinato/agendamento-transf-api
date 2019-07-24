@@ -8,6 +8,15 @@ import org.springframework.data.repository.query.Param;
 
 public interface TipoTransacaoRepository extends JpaRepository<TipoTransacao, TipoTransacaoId> {
 
+	/**
+	 * Busca um tipo de transação parametrizado na base de dados
+	 * a partir do valor e da diferença de dias entre a data do agendamento e
+	 * a data da transferência. 
+	 * 
+	 * @param qtdDiasAgendamento
+	 * @param valor
+	 * @return
+	 */
     @Query("select  tt " +
             "from   TipoTransacao tt " +
             "where  :qtdDiasAgendamento between tt.qtdDiasDe and tt.qtdDiasAte " +

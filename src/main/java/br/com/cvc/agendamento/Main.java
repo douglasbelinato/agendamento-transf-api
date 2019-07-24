@@ -3,6 +3,10 @@ package br.com.cvc.agendamento;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * Classe principal para iniciar a aplicação SpringBoot 
+ *
+ */
 @SpringBootApplication
 public class Main {
 

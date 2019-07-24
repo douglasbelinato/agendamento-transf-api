@@ -19,6 +19,10 @@ import br.com.cvc.agendamento.exception.BusinessException;
 import br.com.cvc.agendamento.utils.MensagensUtils;
 import io.swagger.annotations.Api;
 
+/**
+ * Manipulador genérico de exceções.
+ *
+ */
 @Api(value = "agendamento-transf-api", hidden = true)
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {

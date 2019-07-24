@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 
 import java.util.Locale;
 
+/**
+ * Componente utilitário para recuperar mensagens parametrizadas na aplicação.
+ *
+ */
 @Component
 public class MensagensUtils {
 
