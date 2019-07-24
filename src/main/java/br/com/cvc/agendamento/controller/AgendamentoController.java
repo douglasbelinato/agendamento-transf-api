@@ -10,12 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.cvc.agendamento.dto.AgendamentoDTO;
 import br.com.cvc.agendamento.dto.ConsultaAgendamentosDTO;
 import br.com.cvc.agendamento.dto.NovoAgendamentoDTO;
-import br.com.cvc.agendamento.exception.BusinessException;
 import br.com.cvc.agendamento.service.AgendamentoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
-@Api(value = "agendamento-transf-api", description = "Operações para agendamento de transferências")
+@Api(value = "agendamento-transf-api")
 @RestController
 public class AgendamentoController {
 
@@ -32,7 +31,7 @@ public class AgendamentoController {
 
     @ApiOperation(value = "Salva um novo agendamento de transferência de um usuário", response = NovoAgendamentoDTO.class)
     @PostMapping(value = "/agendamentos", consumes = "application/json")
-    public ResponseEntity<NovoAgendamentoDTO> novo(@RequestBody AgendamentoDTO dto) throws BusinessException {
+    public ResponseEntity<NovoAgendamentoDTO> novo(@RequestBody AgendamentoDTO dto) {
         NovoAgendamentoDTO novoAgendamentoDTO = agendamentoService.inserir(dto);
 
         return ResponseEntity.ok().body(novoAgendamentoDTO);

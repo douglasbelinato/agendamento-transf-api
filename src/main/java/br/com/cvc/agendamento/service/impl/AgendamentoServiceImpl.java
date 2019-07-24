@@ -2,7 +2,6 @@ package br.com.cvc.agendamento.service.impl;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -25,7 +24,7 @@ import br.com.cvc.agendamento.utils.MensagensUtils;
 @Service
 public class AgendamentoServiceImpl implements AgendamentoService {
 	
-	private Logger Logger = LoggerFactory.getLogger(AgendamentoServiceImpl.class);
+	private Logger log = LoggerFactory.getLogger(AgendamentoServiceImpl.class);
 
     @Autowired
     private AgendamentoRepository agendamentoRepository;
@@ -38,15 +37,11 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
     @Override
     public ConsultaAgendamentosDTO listar() {
-        Logger.info("Iniciando consulta de agendamentos");
+        log.info("Iniciando consulta de agendamentos");
     	
     	List<Agendamento> agendamentos = agendamentoRepository.findAll();
 
-    	Logger.info("Consulta de agendamentos realizada com sucess");
-    	
-        if (agendamentos == null) {
-            agendamentos = new ArrayList<>();
-        }
+    	log.info("Consulta de agendamentos realizada com sucess");
 
         ConsultaAgendamentosDTO consultaAgendamentosDTO = new ConsultaAgendamentosDTO();
         consultaAgendamentosDTO.setAgendamentos(agendamentos);
@@ -55,10 +50,10 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     }
 
     @Override
-    public NovoAgendamentoDTO inserir(AgendamentoDTO dto) throws BusinessException {
+    public NovoAgendamentoDTO inserir(AgendamentoDTO dto) {
     	validarDadosDeEntrada(dto);
     	
-    	Logger.info("Inciando processo de inclusão de novo agendamento de transferencia");
+    	log.info("Inciando processo de inclusão de novo agendamento de transferencia");
     	
     	LocalDate dataHoje = LocalDate.now();
     	long qtdDiasAgendamento = dataHoje.until(dto.getDataTransferencia(), ChronoUnit.DAYS);
@@ -66,7 +61,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
         TipoTransacao tipoTransacao = tipoTransacaoRepository.findByQtdDiasAndValor((int) qtdDiasAgendamento, dto.getValor());
 
         if (tipoTransacao != null) {
-        	Logger.info("Transação possui taxa cadastrada - Tipo da Taxa: {} - Prioridade {}",tipoTransacao.getId().getCodTipoTransacao(), tipoTransacao.getId().getFaixaPrioridade());
+        	log.info("Transação possui taxa cadastrada - Tipo da Taxa: {} - Prioridade {}",tipoTransacao.getId().getCodTipoTransacao(), tipoTransacao.getId().getFaixaPrioridade());
             
         	NovoAgendamentoDTO novoAgendamentoDTO = new NovoAgendamentoDTO();
             Double taxa = 0d;
@@ -94,7 +89,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
             Agendamento agendamentoSalvo = agendamentoRepository.save(agendamento);
             
-            Logger.info("Agendamento de transferencia incluído com sucesso");
+            log.info("Agendamento de transferencia incluído com sucesso");
 
             novoAgendamentoDTO.setId(agendamentoSalvo.getId());
             novoAgendamentoDTO.setTaxa(taxa);
@@ -106,7 +101,7 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     }
     
     private void validarDadosDeEntrada(AgendamentoDTO dto) {
-    	Logger.info("Iniciando validação dos dados de entrada do novo agendamento");
+    	log.info("Iniciando validação dos dados de entrada do novo agendamento");
     	
     	String mensagem = null;
     	

@@ -11,10 +11,11 @@ public class BusinessException extends RuntimeException {
 
 	private static final long serialVersionUID = -6403647326719815387L;
 	
-	private ResponseErroDTO response;
+	private final ResponseErroDTO response;
 
     public BusinessException() {
-        super();
+    	super();
+    	response = new ResponseErroDTO();
     }
 
     public BusinessException(String mensagem) {

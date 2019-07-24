@@ -23,14 +23,14 @@ import io.swagger.annotations.Api;
 @ControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
-    private static Logger Logger = LoggerFactory.getLogger(ExceptionHandlerController.class);
+    private Logger log = LoggerFactory.getLogger(ExceptionHandlerController.class);
 
     @Autowired
     private MensagensUtils mensagensUtils;
 
     @ExceptionHandler({BusinessException.class})
     public ResponseEntity<ResponseErroDTO> handleBusinessException(BusinessException e) {
-    	Logger.error("handleBusinessException()", e);
+    	log.error("handleBusinessException()", e);
 
         ResponseErroDTO response = e.getResponse();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
@@ -38,7 +38,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
-    	Logger.error("handleMissingServletRequestParameter()", e);
+    	log.error("handleMissingServletRequestParameter()", e);
 
         String mensagem = mensagensUtils.get("api.erro.request.parametro.nao.encontrado", new String[] { e.getParameterName() });
 
@@ -48,7 +48,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
     public ResponseEntity<ResponseErroDTO> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-    	Logger.error("handleMethodArgumentTypeMismatchException()", e);
+    	log.error("handleMethodArgumentTypeMismatchException()", e);
 
     	String mensagem = mensagensUtils.get("api.erro.request.tipo.parametro.invalido", new String[] { e.getName() });
 
@@ -58,7 +58,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({Exception.class})
     public ResponseEntity<ResponseErroDTO> heandleException(Exception e) {
-    	Logger.error("heandleException()", e);
+    	log.error("heandleException()", e);
 
     	String mensagem = mensagensUtils.get("api.erro.request.internal.server.error", null);
 
