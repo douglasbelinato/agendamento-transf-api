@@ -1,13 +1,3 @@
--- Criando tabela de usuários
-create table usuario (
-    id bigint auto_increment not null,
-    email varchar(100) not null,
-    senha varchar(50) not null,
-    data_inclusao timestamp not null,
-    primary key (email)
-);
-
--- Criando tabela de agendamentos de transferência
 create table agendamentos_transferencia (
     id bigint auto_increment not null,
     conta_origem int not null,
@@ -16,9 +6,7 @@ create table agendamentos_transferencia (
     taxa double not null,
     data_transferencia date not null,
     data_agendamento date not null,
-    id_usuario bigint not null,
-    primary key (id),
-    foreign key (id_usuario) references usuario(id)
+    primary key (id)
 );
 
 -- Criando tabela de tipos de transação, responsável pela parametrização das taxas

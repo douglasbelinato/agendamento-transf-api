@@ -1,11 +1,25 @@
 package br.com.cvc.agendamento.model;
 
-import lombok.*;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter @Setter
 @Builder
@@ -35,14 +49,15 @@ public class Agendamento implements Serializable {
     @Column(name = "taxa")
     private Double taxa;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "data_transferencia")
     private LocalDate dataTransferencia;
 
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(name = "data_agendamento")
     private LocalDate dataAgendamento;
-
-    @Column(name = "id_usuario")
-    private Long idUsuario;
 
     public static class AgendamentoBuilder {
         public AgendamentoBuilder agendamentoValido() {
@@ -53,7 +68,6 @@ public class Agendamento implements Serializable {
             taxa = 0.06d;
             dataTransferencia = LocalDate.now();
             dataAgendamento = LocalDate.now();
-            idUsuario = 1L;
             return this;
         }
     }

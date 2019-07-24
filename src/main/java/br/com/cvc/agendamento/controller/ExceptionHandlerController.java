@@ -1,9 +1,8 @@
 package br.com.cvc.agendamento.controller;
 
-import br.com.cvc.agendamento.dto.ResponseErroDTO;
-import br.com.cvc.agendamento.exception.BusinessException;
-import br.com.cvc.agendamento.utils.MensagensUtils;
-import io.swagger.annotations.Api;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +16,10 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import br.com.cvc.agendamento.dto.ResponseErroDTO;
+import br.com.cvc.agendamento.exception.BusinessException;
+import br.com.cvc.agendamento.utils.MensagensUtils;
+import io.swagger.annotations.Api;
 
 @Api(value = "agendamento-transf-api", hidden = true)
 @ControllerAdvice

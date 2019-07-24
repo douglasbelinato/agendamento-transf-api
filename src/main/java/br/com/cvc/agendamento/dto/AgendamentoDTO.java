@@ -1,12 +1,19 @@
 package br.com.cvc.agendamento.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter @Setter
 @Builder
@@ -35,9 +42,6 @@ public class AgendamentoDTO implements Serializable {
     @JsonFormat(pattern = "dd-MM-yyyy")
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private LocalDate dataAgendamento;
-
-    @ApiModelProperty(notes = "ID do usuaário que está realizando o agendamento", required = true, example = "1")
-    private Long idUsuario;
 
     public static class AgendamentoDTOBuilder {
         public AgendamentoDTOBuilder novoAgendamentoComDataTransfNoMesmoDia() {
@@ -88,12 +92,18 @@ public class AgendamentoDTO implements Serializable {
             dataTransferencia = LocalDate.now().plusDays(45);
             return this;
         }
+        
+        public AgendamentoDTOBuilder novoAgendamentoComDataTransfMenorQueDatadeHoje() {
+            popularDadosComuns();
+            valor = 100000d;
+            dataTransferencia = LocalDate.now().minusDays(5);
+            return this;
+        }
 
         private void popularDadosComuns() {
             contaOrigem = 12345;
             contaDestino = 45678;
             dataAgendamento = LocalDate.now();
-            idUsuario = 1L;
         }
     }
 }

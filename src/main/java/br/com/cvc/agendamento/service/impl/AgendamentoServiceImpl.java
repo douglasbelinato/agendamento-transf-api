@@ -1,8 +1,14 @@
 package br.com.cvc.agendamento.service.impl;
 
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import br.com.cvc.agendamento.dto.AgendamentoDTO;
 import br.com.cvc.agendamento.dto.ConsultaAgendamentosDTO;
-import br.com.cvc.agendamento.dto.FiltroConsultaAgendamentoDTO;
 import br.com.cvc.agendamento.dto.NovoAgendamentoDTO;
 import br.com.cvc.agendamento.enums.FlagEnum;
 import br.com.cvc.agendamento.exception.BusinessException;
@@ -12,12 +18,6 @@ import br.com.cvc.agendamento.repository.AgendamentoRepository;
 import br.com.cvc.agendamento.repository.TipoTransacaoRepository;
 import br.com.cvc.agendamento.service.AgendamentoService;
 import br.com.cvc.agendamento.utils.MensagensUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AgendamentoServiceImpl implements AgendamentoService {
@@ -32,8 +32,8 @@ public class AgendamentoServiceImpl implements AgendamentoService {
     private MensagensUtils mensagensUtils;
 
     @Override
-    public ConsultaAgendamentosDTO listar(FiltroConsultaAgendamentoDTO dto) {
-        List<Agendamento> agendamentos = agendamentoRepository.findByIdUsuario(dto.getIdUsuario());
+    public ConsultaAgendamentosDTO listar() {
+        List<Agendamento> agendamentos = agendamentoRepository.findAll();
 
         if (agendamentos == null) {
             agendamentos = new ArrayList<>();
@@ -41,16 +41,15 @@ public class AgendamentoServiceImpl implements AgendamentoService {
 
         ConsultaAgendamentosDTO consultaAgendamentosDTO = new ConsultaAgendamentosDTO();
         consultaAgendamentosDTO.setAgendamentos(agendamentos);
-        consultaAgendamentosDTO.setPagina(dto.getPagina());
-        consultaAgendamentosDTO.setQtdRegistrosPagina(dto.getQtdRegistrosPagina());
-        consultaAgendamentosDTO.setColunaOrdenacao(dto.getColunaOrdenacao());
 
         return consultaAgendamentosDTO;
     }
 
     @Override
     public NovoAgendamentoDTO inserir(AgendamentoDTO dto) throws BusinessException {
-        long qtdDiasAgendamento = dto.getDataAgendamento().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
+    	validarDadosDeEntrada(dto);    	
+    	
+    	long qtdDiasAgendamento = dto.getDataAgendamento().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
 
         TipoTransacao tipoTransacao = tipoTransacaoRepository.findByQtdDiasAndValor((int) qtdDiasAgendamento, dto.getValor());
 
@@ -77,7 +76,6 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             agendamento.setTaxa(taxa);
             agendamento.setDataTransferencia(dto.getDataTransferencia());
             agendamento.setDataAgendamento(dto.getDataAgendamento());
-            agendamento.setIdUsuario(dto.getIdUsuario());
 
             Agendamento agendamentoSalvo = agendamentoRepository.save(agendamento);
 
@@ -85,9 +83,20 @@ public class AgendamentoServiceImpl implements AgendamentoService {
             novoAgendamentoDTO.setTaxa(taxa);
             return novoAgendamentoDTO;
         }
-
+        
         List<String> mensagens = new ArrayList<>();
         mensagens.add(mensagensUtils.get("api.agendamento.novo.business.exception.taxa.nao.cadastrada", null));
         throw new BusinessException(mensagens);
+    }
+    
+    private void validarDadosDeEntrada(AgendamentoDTO dto) {
+    	List<String> mensagens = new ArrayList<>();
+    	
+    	long qtdDiasAgendamento = dto.getDataAgendamento().until(dto.getDataTransferencia(), ChronoUnit.DAYS);
+        
+        if (qtdDiasAgendamento < 0) {
+        	mensagens.add(mensagensUtils.get("api.agendamento.novo.business.exception.data.transferencia.incorreta", null));
+            throw new BusinessException(mensagens);
+        }
     }
 }

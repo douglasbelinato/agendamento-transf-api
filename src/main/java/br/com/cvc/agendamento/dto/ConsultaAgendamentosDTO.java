@@ -17,12 +17,9 @@ public class ConsultaAgendamentosDTO implements Serializable {
     private static final long serialVersionUID = -8808507295757697554L;
 
     private List<Agendamento> agendamentos;
-    private Integer pagina;
-    private Integer qtdRegistrosPagina;
-    private Integer colunaOrdenacao;
 
     public static class ConsultaAgendamentosDTOBuilder {
-        public ConsultaAgendamentosDTOBuilder comListaAgendamentosParaUmUsuario() {
+        public ConsultaAgendamentosDTOBuilder comListaAgendamentos() {
             agendamentos = new ArrayList<>();
             Agendamento agendamento1 = new Agendamento();
             agendamentos.add(agendamento1);
