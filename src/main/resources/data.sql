@@ -22,4 +22,4 @@ insert into tipo_transacao (cod_tipo_transacao, faixa_prioridade, qtd_dias_de, q
     values ('C', 3, 31, 40, 0, 999999.99, 0, 0.04, 'N', current_timestamp, 'S');
 
 insert into tipo_transacao (cod_tipo_transacao, faixa_prioridade, qtd_dias_de, qtd_dias_ate, valor_transf_de, valor_transf_ate, taxa_fixa, taxa_percentual, flag_fator_qtd_dias, data_inclusao, flag_ativa)
-    values ('C', 4, 41, 999, 100000.00, 999999.99, 0, 0.02, 'N', current_timestamp, 'S');
+    values ('C', 4, 41, 999, 100001.00, 999999.99, 0, 0.02, 'N', current_timestamp, 'S');
