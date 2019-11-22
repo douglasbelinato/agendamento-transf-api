@@ -6,7 +6,8 @@ def HTTP_PORT="8090"
 node {
 
     stage('Initialize'){
-       
+       def mavenHome  = tool 'myMaven'
+       env.PATH = "${mavenHome}/bin:${env.PATH}"
     }
 
     stage('Checkout') {
