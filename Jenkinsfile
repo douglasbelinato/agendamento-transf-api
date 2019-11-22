@@ -21,9 +21,9 @@ node {
     stage('Image Build'){
         imageBuild(CONTAINER_NAME, CONTAINER_TAG)
     }
-    
-    def imageBuild(containerName, tag){
-        sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
-        echo "Image build complete"
-    }
+}
+
+def imageBuild(containerName, tag){
+    sh "docker build -t $containerName:$tag  -t $containerName --pull --no-cache ."
+    echo "Image build complete"
 }
